@@ -4564,11 +4564,22 @@ function wal() {
    Things to Buy: plan items; when bought, the price is taken from the chosen Wallet account as an expense.
    Social Media: 3 YouTube + 3 TikTok + 1 Instagram accounts, follower log, video links with view counters, one growth graph.
    ============================================================ */
-const BUYC = ['Jewelry', 'Skin care', 'Perfume', 'Hair products', 'Clothes', 'Shoes', 'Bags', 'Accessories', 'Electronics', 'Furniture', 'Cars', 'House', 'Other'];
+const BUYC = ['Jewelry', 'Skin care', 'Perfume', 'Hair products', 'Clothes', 'Shoes', 'Bags', 'Accessories', 'Dental', 'Electronics', 'Furniture', 'Cars', 'House', 'Other'];
 function buyS() {
     if (!isO(S.buy)) S.buy = {};
     if (!Array.isArray(S.buy.items)) S.buy.items = [];
     S.buy.items = S.buy.items.filter(x => isO(x) && typeof x.id === 'string');
+    if (!S.buy.seeded) {
+        S.buy.seeded = 1;
+        if (!S.buy.items.length) {
+            const SEED = {
+                'Skin care': ['Scented body lotion', 'Method body wash', 'Dove pampering body wash', 'Crave body lotion', 'eos moisture body lotion', 'Dove body scrub', 'Cerave hydrating facial cleanser', 'Cerave moisturizing cream', 'Vaseline lip balm', 'Dove soap'],
+                'Perfume': ['Kamrah', 'Asad', 'Mahir black edition', 'Cologne', 'Into the night', 'Now', 'Kaaf fresh', '9pm night out', 'Valentino', 'Stronger with you', 'Assad bourbon', 'Afnan supremacy'],
+                'Hair products': ['Black dax', 'Cantu', 'Blue magic', 'Shea moisture conditioner', 'Native conditioner']
+            };
+            Object.keys(SEED).forEach(c => SEED[c].forEach((n, i) => S.buy.items.push({ id: 'seed' + c.replace(/\W/g, '') + i, name: n, cat: c, note: '', added: TODAY, done: 0 })));
+        }
+    }
     S.buy.items.forEach(x => { if (!BUYC.includes(x.cat)) x.cat = 'Other'; });
     return S.buy;
 }
